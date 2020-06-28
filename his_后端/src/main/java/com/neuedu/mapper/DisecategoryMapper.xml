@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.DisecategoryMapper">
+    <select id="getSchedulingList1" resultType="java.util.Map">
+        SELECT   ID, Deptname,Postname,employerName, Sex, startDate
+        FROM Induction
+        WHERE ID>0
+
+        <if test="keywords!=null and keywords!=''">
+            AND ( startDate >= #{keywords}
+        </if>
+
+        <if test="keywords2!=null and keywords2!=''">
+            AND startDate &lt;= #{keywords2} )
+        </if>
+        <if test="keywords3!=null and keywords3!=''">
+            AND Deptname = #{keywords3}
+        </if>
+        ORDER BY ID DESC limit #{start},#{count};
+    </select>
+
+
+    <select id="getSchedulingCount1" resultType="int">
+        SELECT count(*) FROM Induction
+        <where>
+
+            <if test="keywords!=null and keywords!=''">
+                startDate&gt;= #{keywords}
+            </if>
+
+            <if test="keywords2!=null and keywords2!=''">
+                AND startDate &lt;= #{keywords2}
+            </if>
+            <if test="keywords3!=null and keywords3!=''">
+                AND Deptname = #{keywords3}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSchedulingCount021" resultType="int">
+        SELECT count(*) FROM Induction
+        <where>
+            <if test="keywords!=null and keywords!=''">
+                startDate = #{keywords}
+            </if>
+        </where>
+    </select>
+
+</mapper>

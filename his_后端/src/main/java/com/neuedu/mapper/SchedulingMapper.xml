@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.SchedulingMapper">
+    <!--按时间段 查排班信息  -->
+    <select id="getSchedulingList" resultType="java.util.Map">
+       SELECT   ID, Deptname,Postname,employerName, Sex, Tornoverreason,endDate
+        FROM dimission
+        WHERE ID>0
+        <if test="keywords!=null and keywords!=''">
+            AND ( endDate >= #{keywords}
+        </if>
+        
+        <if test="keywords2!=null and keywords2!=''">
+            AND endDate&lt;= #{keywords2} )
+        </if>
+        <if test="keywords3!=null and keywords3!=''">
+            AND Deptname = #{keywords3}
+        </if>
+        ORDER BY ID DESC limit #{start},#{count};
+    </select>
+
+
+  <!--  &lt;!&ndash;5查医生的初始挂号额度  按照日期  午别 医生 &ndash;&gt;
+    <select id="getSchedulingCount06" resultType="int">
+        SELECT  DISTINCT d.RegistQuota RegistQuota
+        FROM Scheduling a,User b,RegistLevel d
+        WHERE a.UserID = b.ID AND b.RegistLeID=d.Id AND b.IsScheduling='是' AND 1=1
+        
+        <if test="keywords!=null and keywords!=''">
+              AND SchedDate = #{keywords}
+        </if>
+        <if test="keywords2!=null and keywords2!=''">
+              AND a.Noon = #{keywords2}
+        </if>
+        <if test="keywords3!=null and keywords3!=''">
+              AND a.UserID = #{keywords3}
+        </if>
+    </select>-->
+    
+    <select id="getSchedulingCount" resultType="int">
+        SELECT count(*) FROM dimission
+        <where>
+            
+        <if test="keywords!=null and keywords!=''">
+            endDate&gt;= #{keywords}
+        </if>
+        
+        <if test="keywords2!=null and keywords2!=''">
+            AND endDate &lt;= #{keywords2}
+        </if>
+            <if test="keywords3!=null and keywords3!=''">
+                AND Deptname = #{keywords3}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getSchedulingCount02" resultType="int">
+        SELECT count(*) FROM dimission
+        <where>
+        <if test="keywords!=null and keywords!=''">
+              endDate = #{keywords}
+        </if>
+        </where>
+    </select>
+
+</mapper>

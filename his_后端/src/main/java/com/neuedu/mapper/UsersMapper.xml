@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.UsersMapper">
+  
+  <sql id="Base_Column_List">    
+   ID ,UserName, Password, RealName,UseType,DocTitleID,IsScheduling,DeptID,RegistLeID,DelMark
+  </sql>
+  <insert id="insertSelective" parameterType="java.util.Map">   
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ID != null">
+        ID,
+      </if>
+      <if test="UserName != null">
+        UserName,
+      </if>
+      <if test="Password != null">
+        Password,
+      </if>
+
+      <if test="RealName != null">
+        RealName,
+      </if>
+      <if test="UseType != null">
+        UseType,
+      </if>
+      <if test="DocTitleID != null">
+        DocTitleID,
+      </if>
+      <if test="IsScheduling != null">
+        IsScheduling,
+      </if>
+      <if test="DeptID != null">
+        DeptID,
+      </if>
+      <if test="RegistLeID != null">
+        RegistLeID,
+      </if>
+      <if test="DelMark != null">
+        DelMark,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ID != null">
+        #{ID,jdbcType=INTEGER},
+      </if>
+      <if test="UserName != null">
+        #{UserName,jdbcType=VARCHAR},
+      </if>
+      <if test="Password != null">
+        #{Password,jdbcType=VARCHAR},
+
+      </if>
+
+      <if test="RealName != null">
+        #{RealName,jdbcType=VARCHAR},
+      </if>
+      <if test="UseType != null">
+        #{UseType,jdbcType=INTEGER},
+      </if>
+      <if test="DocTitleID != null">
+        #{DocTitleID,jdbcType=INTEGER},
+      </if>
+      <if test="IsScheduling != null">
+        #{IsScheduling,jdbcType=CHAR},
+      </if>
+      <if test="DeptID != null">
+        #{DeptID,jdbcType=INTEGER},
+      </if>
+      <if test="RegistLeID != null">
+        #{RegistLeID,jdbcType=INTEGER},
+
+      </if>
+      <if test="DelMark != null">
+        #{DelMark,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="java.util.Map">    
+    update user
+    <set>
+      <if test="ID != null">
+        ID=#{ID,jdbcType=INTEGER},
+      </if>
+      <if test="UserName != null">
+        UserName= #{UserName,jdbcType=VARCHAR},
+      </if>
+      <if test="Password != null">
+        Password= #{Password,jdbcType=VARCHAR},
+
+      </if>
+
+      <if test="RealName != null">
+        RealName= #{RealName,jdbcType=VARCHAR},
+      </if>
+      <if test="UseType != null">
+        UseType= #{UseType,jdbcType=VARCHAR},
+      </if>
+      <if test="DocTitleID != null">
+        DocTitleID= #{DocTitleID,jdbcType=INTEGER},
+
+      </if>
+      <if test="IsScheduling != null">
+        IsScheduling=  #{IsScheduling,jdbcType=INTEGER},
+      </if>
+      <if test="DeptID != null">
+        DeptID= #{DeptID,jdbcType=CHAR},
+      </if>
+      <if test="RegistLeID != null">
+        RegistLeID=#{RegistLeID,jdbcType=INTEGER},
+
+      </if>
+      <if test="DelMark != null">
+        DelMark= #{DelMark,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{ID,jdbcType=INTEGER}
+  </update>
+  
+
+  
+
+	
+	<!-- 分页显示药品信息 -->
+     <select id="getUsersList" resultType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+        WHERE DelMark = 1
+       <if test="keywords!=null and keywords!='' ">
+       AND UserName LIKE concat('%',#{keywords},'%')
+     </if>
+       LIMIT #{start},#{count};
+    </select>
+
+     <select id="getUsersCount" resultType="int">
+        SELECT count(*) FROM user
+        WHERE DelMark = 1
+       <if test="keywords!=null and keywords!='' ">
+         AND UserName LIKE concat('%',#{keywords},'%')
+       </if>
+    </select>
+
+</mapper>
